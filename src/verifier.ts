@@ -137,7 +137,8 @@ export function verifyPage(title: string, callback: Function | null = null) {
     if (tab.id) {
       chrome.browserAction.setBadgeText({ text: '⏳' });
       const verbose = false;
-      [verificationStatus, details] = await externalVerifierVerifyPage(title, verbose, false);
+      const server = 'http://localhost:9352';
+      [verificationStatus, details] = await externalVerifierVerifyPage(title, server, verbose, false);
       chrome.browserAction.setBadgeText({ text: verificationStatus === 'NORECORD' ? 'NR' : 'DA' });
       setBadgeStatus(verificationStatus)
       chrome.tabs.sendMessage(
