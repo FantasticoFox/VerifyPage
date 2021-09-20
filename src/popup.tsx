@@ -4,8 +4,6 @@ import ReactDOM from "react-dom";
 
 import { verifyPage, extractPageTitle, BadgeColorNA, BadgeColorBlue, getUrlObj } from "./verifier";
 
-const apiURL = 'http://localhost:9352/rest.php/data_accounting/v1/standard';
-
 // TODO this is totally not idiomatic.
 const verificationStatusMap: { [key: string]: string } = {
   // See the color in verifier.ts
