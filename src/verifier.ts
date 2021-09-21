@@ -58,13 +58,13 @@ export function setBadgeStatus(status: string) {
     badgeColor = 'black';
     badgeText = '??';
   }
-  chrome.browserAction.setBadgeBackgroundColor({color: badgeColor});
-  chrome.browserAction.setBadgeText({ text: badgeText });
+  chrome.action.setBadgeBackgroundColor({color: badgeColor});
+  chrome.action.setBadgeText({ text: badgeText });
 }
 
 export function setBadgeNA() {
-  chrome.browserAction.setBadgeBackgroundColor({color: BadgeColorNA});
-  chrome.browserAction.setBadgeText({ text: BadgeTextNA });
+  chrome.action.setBadgeBackgroundColor({color: BadgeColorNA});
+  chrome.action.setBadgeText({ text: BadgeTextNA });
 }
 
 export function setInitialBadge(urlObj: URL | null) {
@@ -90,8 +90,8 @@ export function setInitialBadge(urlObj: URL | null) {
           badgeText = BadgeTextNORECORD;
         }
         badgeColor = BadgeColorBlue;
-        chrome.browserAction.setBadgeBackgroundColor({color: badgeColor});
-        chrome.browserAction.setBadgeText({ text: badgeText });
+        chrome.action.setBadgeBackgroundColor({color: badgeColor});
+        chrome.action.setBadgeText({ text: badgeText });
         console.log("setInitialBadge", badgeText);
         resolve(badgeText);
       });
@@ -135,11 +135,11 @@ export function verifyPage(title: string, callback: Function | null = null) {
     let verificationStatus = "N/A";
     let details: { verified_ids: string[]; revision_details: any[]; } | null = null;
     if (tab.id) {
-      chrome.browserAction.setBadgeText({ text: '⏳' });
+      chrome.action.setBadgeText({ text: '⏳' });
       const verbose = false;
       const server = 'http://localhost:9352';
       [verificationStatus, details] = await externalVerifierVerifyPage(title, server, verbose, false);
-      chrome.browserAction.setBadgeText({ text: verificationStatus === 'NORECORD' ? 'NR' : 'DA' });
+      chrome.action.setBadgeText({ text: verificationStatus === 'NORECORD' ? 'NR' : 'DA' });
       setBadgeStatus(verificationStatus)
       chrome.tabs.sendMessage(
         tab.id as number,
@@ -163,7 +163,7 @@ export function verifyPage(title: string, callback: Function | null = null) {
           // We use this info to check if the page has been updated since we
           // last verify it. If so, we rerun the verification process
           // automatically.
-          if (!details || !details.revision_details) {
+          if (!details || !details.revision_details || details.revision_details.length === 0) {
             return;
           }
           const lastDetail = details.revision_details[details.revision_details.length - 1];
