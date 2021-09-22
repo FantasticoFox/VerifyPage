@@ -25,7 +25,7 @@ function doInitialVerification(tab: any, doCheckCache: boolean = true) {
   chrome.cookies.get({url: sanitizedUrl, name: pageTitle}, (cookie) => {
     console.log("doInitialVerification, cookie", cookie ? cookie.value : cookie, pageTitle);
     function doVerifyFromScratch() {
-      setInitialBadge(urlObj)
+      setInitialBadge(tab.id, urlObj)
       .then((badgeText) => {
         if (badgeText === BadgeTextNA) {
           delete processingTabId[tab.id];
@@ -56,7 +56,7 @@ function doInitialVerification(tab: any, doCheckCache: boolean = true) {
       }
       // Check if our stored verification info is outdated
       const sanitizedUrl = tab.url.split('?')[0];
-      checkIfCacheIsUpToDate(pageTitle, sanitizedUrl, (isUpToDate: boolean) => {
+      checkIfCacheIsUpToDate(tab.id, pageTitle, sanitizedUrl, (isUpToDate: boolean) => {
         if (isUpToDate) {
           setBadgeStatus(cookie.value.toString());
           delete processingTabId[tab.id];

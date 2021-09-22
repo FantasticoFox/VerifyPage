@@ -1,4 +1,5 @@
 import * as http from "http";
+import * as https from "https";
 // Not yet typed
 // @ts-ignore
 import { verifyPage as externalVerifierVerifyPage, formatRevisionInfo2HTML } from "data-accounting-external-verifier";
@@ -11,10 +12,12 @@ export const BadgeTextNORECORD = 'NR';
 // Blueberry
 export const BadgeColorBlue = '#427FED';
 
-const apiURL = 'http://localhost:9352/rest.php/data_accounting/v1/standard';
-
 function isEmpty(obj: any) {
   return Object.keys(obj).length === 0;
+}
+
+function adaptiveGet(url: string) {
+  return url.startsWith('https://') ? https.get : http.get
 }
 
 export function getUrlObj(tab: any) {
@@ -67,20 +70,38 @@ export function setBadgeNA() {
   chrome.action.setBadgeText({ text: BadgeTextNA });
 }
 
-export function setInitialBadge(urlObj: URL | null) {
+/**
+ * Promise wrapper for chrome.tabs.sendMessage
+ * @param tabId
+ * @param item
+ * @returns {Promise<any>}
+ */
+function sendMessagePromise(tabId: number, item: any): Promise<string | null> {
+  return new Promise((resolve, reject) => {
+    chrome.tabs.sendMessage(tabId, item, (msg: string | null) => {
+      resolve(msg);
+    });
+  });
+}
+
+function getDAMeta(tabId: number) {
+  return sendMessagePromise(tabId, {check_da: true});
+}
+
+export async function setInitialBadge(tabId: number, urlObj: URL | null) {
   if (!urlObj) {
     setBadgeNA();
     return Promise.resolve(BadgeTextNA);
   }
   const extractedPageTitle = extractPageTitle(urlObj);
-  // TODO don't hardcode to localhost
-  if (urlObj.hostname != "localhost") {
+  const serverUrl = await getDAMeta(tabId);
+  if (!serverUrl) {
     setBadgeNA();
     return Promise.resolve(BadgeTextNA);
   }
-  const urlForChecking = `${apiURL}/get_page_last_rev?var1=${extractedPageTitle}`;
+  const urlForChecking = `${serverUrl}/rest.php/data_accounting/v1/standard/get_page_last_rev?var1=${extractedPageTitle}`;
   const promise = new Promise((resolve, reject) => {
-    http.get(urlForChecking, (response) => {
+    adaptiveGet(urlForChecking)(urlForChecking, (response) => {
       response.on('data', (data) => {
         const respText = data.toString();
         let badgeText, badgeColor;
@@ -137,18 +158,13 @@ export function verifyPage(title: string, callback: Function | null = null) {
     if (tab.id) {
       chrome.action.setBadgeText({ text: '⏳' });
       const verbose = false;
-      const server = 'http://localhost:9352';
-      [verificationStatus, details] = await externalVerifierVerifyPage(title, server, verbose, false);
+      const serverUrl = await getDAMeta(tab.id);
+      if (!serverUrl) {
+        chrome.action.setBadgeText({ text: 'NR' });
+        return;
+      }
+      [verificationStatus, details] = await externalVerifierVerifyPage(title, serverUrl, verbose, false);
       setBadgeStatus(verificationStatus)
-      chrome.tabs.sendMessage(
-        tab.id as number,
-        {
-          pageTitle: verificationStatus,
-        },
-        (msg: string) => {
-          console.log("result message:", msg);
-        }
-      );
       if (tab.url) {
         const sanitizedUrl = tab.url.split('?')[0];
         // Update cookie
@@ -183,10 +199,16 @@ export function verifyPage(title: string, callback: Function | null = null) {
   });
 }
 
-export function checkIfCacheIsUpToDate(pageTitle: string, sanitizedUrl: string, callback: Function) {
+export async function checkIfCacheIsUpToDate(tabId: number, pageTitle: string, sanitizedUrl: string, callback: Function) {
   // Check if our stored verification info is outdated
-  const urlForChecking = `${apiURL}/get_page_last_rev?var1=${pageTitle}`;
-  http.get(urlForChecking, (response) => {
+  const serverUrl = await getDAMeta(tabId);
+  if (!serverUrl) {
+    // This execution branch shouldn't happen. If it happens, then don't update
+    // cache since the page is not a data accounting page anyway.
+    callback(true);
+  }
+  const urlForChecking = `${serverUrl}/rest.php/data_accounting/v1/standard/get_page_last_rev?var1=${pageTitle}`;
+  adaptiveGet(urlForChecking)(urlForChecking, (response) => {
       response.on('data', (data) => {
         const actual = JSON.parse(data);
         const key = "verification_hash_id_" + sanitizedUrl

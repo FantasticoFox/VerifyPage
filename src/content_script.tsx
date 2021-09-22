@@ -1,9 +1,12 @@
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
-  if (msg.color) {
-    console.log("Receive color = " + msg.color);
-    document.body.style.backgroundColor = msg.color;
-    sendResponse("Change color to " + msg.color);
+  if (msg.check_da) {
+    const DAMeta = document.querySelector('meta[name="data-accounting-mediawiki"]');
+    if (DAMeta && DAMeta instanceof HTMLMetaElement) {
+      sendResponse(DAMeta.content);
+    } else {
+      sendResponse(null);
+    }
   } else {
-    sendResponse("Color message is none.");
+    sendResponse(null);
   }
 });
