@@ -27,11 +27,10 @@
 
   "permissions": [
     "storage",
-    "activeTab",
     "cookies"
   ],
 
   "host_permissions": [
-    "*://*/*"
+    "<all_urls>"
   ]
 }

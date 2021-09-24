@@ -14,14 +14,14 @@ module.exports = {
         path: path.join(__dirname, "../dist/js"),
         filename: "[name].js",
     },
-    // Wait for the response in
-    // https://github.com/chibat/chrome-extension-typescript-starter/issues/40
-    //optimization: {
-    //    splitChunks: {
-    //        name: "vendor",
-    //        chunks: "initial",
-    //    },
-    //},
+    optimization: {
+        splitChunks: {
+            name: "vendor",
+            chunks(chunk) {
+              return chunk.name !== 'background';
+            }
+        },
+    },
     module: {
         rules: [
             {
