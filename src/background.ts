@@ -17,9 +17,6 @@ function doInitialVerification(tab: any, doCheckCache: boolean = true) {
     return;
   }
 
-  if (!tab.url) {
-    return;
-  }
   const sanitizedUrl = tab.url.split('?')[0];
 
   chrome.cookies.get({url: sanitizedUrl, name: pageTitle}, (cookie) => {
