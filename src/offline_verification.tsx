@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import Clipboard from "clipboard";
 import wtf from "wtf_wikipedia";
+import "./assets/scss/styles.scss";
+
 // Not yet typed
 // @ts-ignore
 import wtfPluginHtml from "wtf-plugin-html";

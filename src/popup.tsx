@@ -2,6 +2,7 @@ import * as http from "http";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import Clipboard from "clipboard";
+import "./assets/scss/styles.scss";
 
 import {
   verifyPage,
@@ -94,14 +95,16 @@ const Popup = () => {
       <div style={{ fontSize: "larger" }}>
         <div style={{ float: "right" }}>
           <button
-            onClick={() => chrome.tabs.create({ url: chrome.runtime.getURL("offline_verification.html") })}
+            onClick={() =>
+              chrome.tabs.create({
+                url: chrome.runtime.getURL("offline_verification.html"),
+              })
+            }
           >
             Offline verifier
           </button>
           &nbsp;
-          <button
-            onClick={() => verifyPage(pageTitle, setPopupInfo)}
-          >
+          <button onClick={() => verifyPage(pageTitle, setPopupInfo)}>
             Verify Page
           </button>
         </div>
