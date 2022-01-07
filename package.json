@@ -11,7 +11,7 @@
     "style": "prettier --write \"src/**/*.{ts,tsx}\""
   },
   "author": "",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "https://github.com/chibat/chrome-extension-typescript-starter.git"
