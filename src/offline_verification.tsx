@@ -131,7 +131,7 @@ const PageVerificationInfo = ({ pageResult }: { pageResult: pageResultT }) => {
         Mime.lookup(lastRevision.content.file.filename) ||
         "application/octet-stream";
       const fileExtension = Mime.extension(mimeType) || "unknown";
-      let blob
+      let blob;
       try {
         blob = b64toBlob(lastRevision.content.file.data, mimeType);
         // The in-RAM file will be garbage-collected once the tab is closed.
