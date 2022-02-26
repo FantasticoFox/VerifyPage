@@ -8,6 +8,7 @@ import {
   Tbody,
   Tr,
   Th,
+  Text,
 } from "@chakra-ui/react";
 import RevisionRow from "./RevisionRow";
 
@@ -18,23 +19,22 @@ import type { RevisionProps } from "../../utils/formatPageInfo";
 // TODO: use better Revision typing
 const VerificationLog = ({ verificationLog }: VerificationLogProps) => {
   const { count, revisions } = verificationLog;
+  const revisionCount = revisions.length;
   return (
     <Box p={4} mb={4}>
       {!count ? (
         <Progress size="xs" isIndeterminate />
       ) : (
         <>
-          <Heading as="h3" mb={2}>
-            <Badge
-              fontSize="inherit"
-              colorScheme="green"
-              variant="solid"
-              mr={2}
-            >
-              {count}
-            </Badge>
-            Verified Page Revisions
-          </Heading>
+          <Box display="flex" mb={2}>
+            <Heading as="h3">
+              <Badge fontSize="inherit" variant="solid" mr={2}>
+                {count}
+              </Badge>
+              Page Revisions
+            </Heading>
+            <Text ml={2}>Successfully parsed revisions: {revisionCount}</Text>
+          </Box>
           <Table variant="striped" size="md">
             <Thead>
               <Tr>
@@ -42,7 +42,7 @@ const VerificationLog = ({ verificationLog }: VerificationLogProps) => {
                 <Th>Time (UTC)</Th>
                 <Th>Domain ID</Th>
                 <Th>Verification Hash Matches</Th>
-                <Th>Witness Event</Th>
+                <Th>Information</Th>
                 <Th>Signature</Th>
               </Tr>
             </Thead>

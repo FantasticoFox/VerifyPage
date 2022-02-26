@@ -91,6 +91,7 @@ const PageVerificationInfo = ({
   async function formatDetailsAndSetVerificationLog(data: {
     [key: string]: any;
   }) {
+    console.log(data.title, data.status);
     let out = await formatPageInfo(
       data.serverUrl,
       data.title,

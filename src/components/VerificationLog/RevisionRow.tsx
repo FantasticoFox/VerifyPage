@@ -33,7 +33,7 @@ const Signature = ({
       return (
         <Flex direction="column" alignItems="center">
           <Box>
-            <CheckCircleIcon color="success" boxSize={6} />
+            <CheckCircleIcon color="success" boxSize={6} mr={1} />
             <LockIcon color="success" boxSize={6} />
           </Box>
           <Text textAlign="center">
@@ -53,8 +53,10 @@ const Signature = ({
     default:
       return (
         <Flex direction="column" alignItems="center">
-          <CloseIcon color="error" boxSize={6} />
-          <LockIcon color="error" boxSize={6} />
+          <Box>
+            <CloseIcon color="error" boxSize={6} mr={1} />
+            <LockIcon color="error" boxSize={6} />
+          </Box>
           <Text>Invalid</Text>
         </Flex>
       );
@@ -87,6 +89,7 @@ const RevisionRow = ({
     isVerified,
     witnessDetail,
     signatureDetails,
+    errorMessage,
   } = revision;
 
   return (
@@ -101,7 +104,11 @@ const RevisionRow = ({
         <VerificationHash isVerified={isVerified} />
       </Td>
       <Td style={{ wordWrap: "break-word" }}>
-        <WitnessDetail witnessDetail={witnessDetail} />
+        {errorMessage ? (
+          errorMessage
+        ) : (
+          <WitnessDetail witnessDetail={witnessDetail} />
+        )}
       </Td>
       <Td>
         <Signature signatureDetails={signatureDetails} />

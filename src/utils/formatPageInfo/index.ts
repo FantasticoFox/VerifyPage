@@ -14,6 +14,7 @@ export type RevisionProps = {
   witnessDetail: string;
   witness: Witness;
   signatureDetails: SignatureDetails;
+  errorMessage: string;
 };
 
 export type SignatureDetails = {
@@ -78,15 +79,19 @@ const formatPageInfo = async (
   let revisions = await Promise.all(
     details.revision_details.map(async (revisionDetail: any): Promise<any> => {
       formatStatus = "Success";
-      const { data, status, witness_detail } = await revisionDetail;
-      const { rev_id } = data.content;
-
+      const { data, status, witness_detail, error_message } =
+        await revisionDetail;
+      if (data) {
+        console.log("data?.content", data?.content);
+      }
+      const revisionId = pathOr("", ["content", "rev_id"], data);
       const timestamp = pathOr("", ["metadata", "time_stamp"], data);
       const domainId = pathOr("", ["metadata", "domain_id"], data);
       const verification = pathOr("", ["verification"], status);
       const witness = pathOr("", ["witness"], data);
       const signatureData = pathOr("", ["signature"], data);
-      const witnessDetail = witness_detail;
+      const signatureStatus = pathOr("", ["signature"], status);
+      const witnessDetail = witness_detail || undefined;
 
       const walletAddress = async (signatureData: SignatureData) => {
         let out;
@@ -100,21 +105,24 @@ const formatPageInfo = async (
       };
 
       const signatureDetails = {
-        signatureStatus: status.signature,
+        signatureStatus,
         walletUrl:
           walletAddress && `${serverUrl}/index.php/User:${walletAddress}`,
         walletAddress: signatureData && (await walletAddress(signatureData)),
       };
 
       return {
-        id: rev_id,
-        url: `${serverUrl}/index.php?title=${title}&oldid=${rev_id}`,
+        id: revisionId,
+        url:
+          revisionId &&
+          `${serverUrl}/index.php?title=${title}&oldid=${revisionId}`,
         time: timestamp && formatDBTimestampToObject(timestamp),
         domainId,
         isVerified: verification && verification === "VERIFIED" ? true : false,
         witnessDetail,
         witness: witness && (await parseWitness(witness)),
         signatureDetails,
+        errorMessage: error_message,
       };
     })
   );
