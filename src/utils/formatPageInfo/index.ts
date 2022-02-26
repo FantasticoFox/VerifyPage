@@ -81,9 +81,7 @@ const formatPageInfo = async (
       formatStatus = "Success";
       const { data, status, witness_detail, error_message } =
         await revisionDetail;
-      if (data) {
-        console.log("data?.content", data?.content);
-      }
+
       const revisionId = pathOr("", ["content", "rev_id"], data);
       const timestamp = pathOr("", ["metadata", "time_stamp"], data);
       const domainId = pathOr("", ["metadata", "domain_id"], data);

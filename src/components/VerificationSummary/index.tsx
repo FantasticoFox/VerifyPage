@@ -14,7 +14,7 @@ const VerificationSummary = ({
       <Heading as="h2" mb={2}>
         {pageTitle}
       </Heading>
-      <Box border="dashed 3px #c9c9c9" rounded={2} px={10} py={4}>
+      <Box border="dashed 1px #c9c9c9" rounded={2} p={3}>
         <VerificationStatus verificationStatus={verificationStatus} />
       </Box>
     </Box>

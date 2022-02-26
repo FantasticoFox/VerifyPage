@@ -21,19 +21,26 @@ const VerificationLog = ({ verificationLog }: VerificationLogProps) => {
   const { count, revisions } = verificationLog;
   const revisionCount = revisions.length;
   return (
-    <Box p={4} mb={4}>
+    <Box p={4} mb={4} border="1px solid black">
       {!count ? (
         <Progress size="xs" isIndeterminate />
       ) : (
         <>
-          <Box display="flex" mb={2}>
-            <Heading as="h3">
+          <Box
+            display="flex"
+            mb={2}
+            justifyContent="space-between"
+            borderBottom="1px solid black"
+          >
+            <Heading as="h3" mb={2}>
               <Badge fontSize="inherit" variant="solid" mr={2}>
                 {count}
               </Badge>
               Page Revisions
             </Heading>
-            <Text ml={2}>Successfully parsed revisions: {revisionCount}</Text>
+            <Text ml={2} as="i">
+              Successfully parsed revisions: <strong>{revisionCount}</strong>
+            </Text>
           </Box>
           <Table variant="striped" size="md">
             <Thead>

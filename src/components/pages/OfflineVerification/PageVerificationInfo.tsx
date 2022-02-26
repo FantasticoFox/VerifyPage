@@ -196,11 +196,7 @@ const PageVerificationInfo = ({
           />
         </Center>
       ) : (
-        <VStack
-          divider={<StackDivider borderColor="black" />}
-          spacing={4}
-          align="stretch"
-        >
+        <VStack spacing={4} align="stretch">
           <VerificationSummary
             pageTitle={pageTitle}
             verificationStatus={verificationStatus}
