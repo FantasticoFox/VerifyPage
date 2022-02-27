@@ -69,7 +69,7 @@ const OfflineVerification = () => {
   };
 
   return (
-    <Layout pageSubtitle="OFFLINE">
+    <Layout>
       <Center marginY={4}>
         <Dashboard
           uppy={uppy}

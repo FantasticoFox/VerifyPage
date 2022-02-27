@@ -11,7 +11,7 @@ const NavBar = ({ toolbar, pageSubtitle }: NavBarProps) => {
     <Flex bg="#343a40" width="100%" padding={4}>
       <Center>
         <Heading as="h1" color="white">
-          Verifier{pageSubtitle ? ` // ${pageSubtitle}` : null}
+          Offline Verifier
         </Heading>
       </Center>
       <Spacer />
