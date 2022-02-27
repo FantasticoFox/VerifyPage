@@ -48,7 +48,7 @@ const VerificationLog = ({ verificationLog }: VerificationLogProps) => {
                 <Th>ID</Th>
                 <Th>Time (UTC)</Th>
                 <Th>Domain ID</Th>
-                <Th>Verification Hash Matches</Th>
+                <Th>Verification Hash</Th>
                 <Th>Information</Th>
                 <Th>Signature</Th>
               </Tr>
