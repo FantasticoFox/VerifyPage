@@ -9,6 +9,7 @@ import {
   Tr,
   Th,
   Text,
+  TableContainer,
 } from "@chakra-ui/react";
 import RevisionRow from "./RevisionRow";
 
@@ -42,27 +43,29 @@ const VerificationLog = ({ verificationLog }: VerificationLogProps) => {
               Successfully parsed revisions: <strong>{revisionCount}</strong>
             </Text>
           </Box>
-          <Table variant="striped" size="md">
-            <Thead>
-              <Tr>
-                <Th>ID</Th>
-                <Th>Time (UTC)</Th>
-                <Th>Domain ID</Th>
-                <Th>Verification Hash</Th>
-                <Th>Information</Th>
-                <Th>Signature</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {revisions.map((revision: RevisionProps, index: number) => (
-                <RevisionRow
-                  key={`${index}-${revision.id}`}
-                  index={index}
-                  revision={revision}
-                />
-              ))}
-            </Tbody>
-          </Table>
+          <TableContainer>
+            <Table variant="striped" size="sm">
+              <Thead>
+                <Tr>
+                  <Th>ID</Th>
+                  <Th>Time (UTC)</Th>
+                  <Th>Domain ID</Th>
+                  <Th>Verification Hash</Th>
+                  <Th>Information</Th>
+                  <Th>Signature</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {revisions.map((revision: RevisionProps, index: number) => (
+                  <RevisionRow
+                    key={`${index}-${revision.id}`}
+                    index={index}
+                    revision={revision}
+                  />
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
         </>
       )}
     </Box>

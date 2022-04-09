@@ -5,6 +5,7 @@ import {
   LockIcon,
   CloseIcon,
 } from "@chakra-ui/icons";
+import WitnessResult from "./WitnessResult";
 import type {
   RevisionProps,
   SignatureDetails,
@@ -36,7 +37,7 @@ const Signature = ({
             <CheckCircleIcon color="success" boxSize={6} mr={1} />
             <LockIcon color="success" boxSize={6} />
           </Box>
-          <Text textAlign="center">
+          <Text textAlign="center" isTruncated>
             <Link href={walletUrl} isExternal textDecoration="underline">
               {walletAddress}
             </Link>
@@ -63,18 +64,6 @@ const Signature = ({
   }
 };
 
-const WitnessDetail = ({ witnessDetail }: { witnessDetail: string }) => {
-  return (
-    <>
-      {witnessDetail ? (
-        <Box dangerouslySetInnerHTML={{ __html: witnessDetail }} />
-      ) : (
-        <Text>None detected</Text>
-      )}
-    </>
-  );
-};
-
 const RevisionRow = ({
   revision,
 }: {
@@ -87,7 +76,7 @@ const RevisionRow = ({
     time,
     domainId,
     isVerified,
-    witnessDetail,
+    witnessResult,
     signatureDetails,
     errorMessage,
   } = revision;
@@ -107,7 +96,7 @@ const RevisionRow = ({
         {errorMessage ? (
           errorMessage
         ) : (
-          <WitnessDetail witnessDetail={witnessDetail} />
+          <WitnessResult witnessResult={witnessResult} />
         )}
       </Td>
       <Td>

@@ -5,13 +5,55 @@ import { formatDBTimestampToObject } from "./timestampFormatter";
 import type { SignatureData, Witness, SignatureStatus } from "../../types";
 import * as nameResolver from "../../name_resolver";
 
+type MerkleProofStatus = "VALID" | "INVALID" | "DOMAIN_SNAPSHOT";
+type EtherscanResult = "true" | "false" | "Transaction hash not found" | string;
+
+// let errMsg
+// if (etherScanResult === "Transaction hash not found") {
+//   errMsg = "Transaction hash not found"
+// } else if (etherScanResult.includes("ENETUNREACH")) {
+//   errMsg = "Server is unreachable"
+// } else {
+//   errMsg = "Online lookup failed"
+// }
+// result.etherscan_error_message = errMsg
+export type EtherscanErrorMessage =
+  | "Transaction hash not found"
+  | "Server is unreachable"
+  | "Online lookup failed"
+  | undefined;
+
+// result.extra = {
+//   domain_snapshot_genesis_hash: witnessData.domain_snapshot_genesis_hash,
+//   merkle_root: witnessData.merkle_root,
+//   witness_event_verification_hash:
+//     witnessData.witness_event_verification_hash,
+// }
+export type WitnessResultExtra = {
+  domain_snapshot_genesis_hash: string;
+  merkle_root: string;
+  witness_event_verification_hash: string;
+} | null;
+
+export type WitnessResultProps = {
+  actual_witness_event_verification_hash: string;
+  doVerifyMerkleProof: boolean;
+  etherscan_error_message: EtherscanErrorMessage;
+  etherscan_result: EtherscanResult;
+  extra: WitnessResultExtra;
+  merkle_proof_status: MerkleProofStatus;
+  tx_hash: string;
+  witness_event_vh_matches: boolean;
+  witness_network: "goerli";
+};
+
 export type RevisionProps = {
   id: number;
   url: string;
   time: FormatDBTimestampToObject; // date
   domainId: string;
   isVerified: boolean;
-  witnessDetail: string;
+  witnessResult: WitnessResultProps;
   witness: Witness;
   signatureDetails: SignatureDetails;
   errorMessage: string;
@@ -79,7 +121,7 @@ const formatPageInfo = async (
   let revisions = await Promise.all(
     details.revision_details.map(async (revisionDetail: any): Promise<any> => {
       formatStatus = "Success";
-      const { data, status, witness_detail, error_message } =
+      const { data, status, witness_result, error_message } =
         await revisionDetail;
 
       const revisionId = pathOr("", ["content", "rev_id"], data);
@@ -89,7 +131,7 @@ const formatPageInfo = async (
       const witness = pathOr("", ["witness"], data);
       const signatureData = pathOr("", ["signature"], data);
       const signatureStatus = pathOr("", ["signature"], status);
-      const witnessDetail = witness_detail || undefined;
+      const witnessResult = witness_result || undefined;
 
       const walletAddress = async (signatureData: SignatureData) => {
         let out;
@@ -117,7 +159,7 @@ const formatPageInfo = async (
         time: timestamp && formatDBTimestampToObject(timestamp),
         domainId,
         isVerified: verification && verification === "VERIFIED" ? true : false,
-        witnessDetail,
+        witnessResult,
         witness: witness && (await parseWitness(witness)),
         signatureDetails,
         errorMessage: error_message,
