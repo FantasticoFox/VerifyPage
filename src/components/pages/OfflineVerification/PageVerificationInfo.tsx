@@ -91,7 +91,6 @@ const PageVerificationInfo = ({
   async function formatDetailsAndSetVerificationLog(data: {
     [key: string]: any;
   }) {
-    console.log(data.title, data.status);
     let out = await formatPageInfo(
       data.serverUrl,
       data.title,
@@ -163,7 +162,6 @@ const PageVerificationInfo = ({
         doVerifyMerkleProof,
         null
       );
-      console.log({ verificationStatus, details });
       const title = pageResult.title;
       const serverUrl = "http://offline_verify_page";
       const verificationData = {

@@ -6,30 +6,16 @@ import type { SignatureData, Witness, SignatureStatus } from "../../types";
 import * as nameResolver from "../../name_resolver";
 
 type MerkleProofStatus = "VALID" | "INVALID" | "DOMAIN_SNAPSHOT";
-type EtherscanResult = "true" | "false" | "Transaction hash not found" | string;
 
-// let errMsg
-// if (etherScanResult === "Transaction hash not found") {
-//   errMsg = "Transaction hash not found"
-// } else if (etherScanResult.includes("ENETUNREACH")) {
-//   errMsg = "Server is unreachable"
-// } else {
-//   errMsg = "Online lookup failed"
-// }
-// result.etherscan_error_message = errMsg
+// see: https://github.com/inblockio/aqua-verifier-js/blob/de3432e7309c642159e756ddf7dc49e602ab660d/index.js#L346-L354
 export type EtherscanErrorMessage =
   | "Transaction hash not found"
   | "Server is unreachable"
   | "Online lookup failed"
   | undefined;
 
-// result.extra = {
-//   domain_snapshot_genesis_hash: witnessData.domain_snapshot_genesis_hash,
-//   merkle_root: witnessData.merkle_root,
-//   witness_event_verification_hash:
-//     witnessData.witness_event_verification_hash,
-// }
-export type WitnessResultExtra = {
+// see: https://github.com/inblockio/aqua-verifier-js/blob/de3432e7309c642159e756ddf7dc49e602ab660d/index.js#L361-L366
+type WitnessResultExtra = {
   domain_snapshot_genesis_hash: string;
   merkle_root: string;
   witness_event_verification_hash: string;
@@ -39,7 +25,6 @@ export type WitnessResultProps = {
   actual_witness_event_verification_hash: string;
   doVerifyMerkleProof: boolean;
   etherscan_error_message: EtherscanErrorMessage;
-  etherscan_result: EtherscanResult;
   extra: WitnessResultExtra;
   merkle_proof_status: MerkleProofStatus;
   tx_hash: string;

@@ -1,9 +1,6 @@
 import { Text, List, ListItem, ListIcon, Link } from "@chakra-ui/react";
 import { CheckCircleIcon, CloseIcon } from "@chakra-ui/icons";
-import type {
-  WitnessResultProps,
-  WitnessResultExtra,
-} from "../../utils/formatPageInfo";
+import type { WitnessResultProps } from "../../utils/formatPageInfo";
 import {
   Radar as RadarIcon,
   CompareArrows as CompareArrowsIcon,
@@ -119,7 +116,10 @@ const WitnessResult = ({
         <ListItem>{etherscan_error_message}</ListItem>
       )}
       <ConditionalIconListItem
-        condition={merkle_proof_status === "VALID"}
+        condition={
+          merkle_proof_status === "VALID" ||
+          merkle_proof_status === "DOMAIN_SNAPSHOT"
+        }
         title="Merkle Proof"
         content={merkle_proof_status}
       />
