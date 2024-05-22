@@ -31,7 +31,7 @@
     "aqua-verifier-js": "git+https://git@github.com/inblockio/aqua-verifier-js.git",
     "bootstrap": "^4.6.0",
     "clipboard": "^2.0.8",
-    "aqua-verifier-js": "git+https://git@github.com/inblockio/aqua-verifier-js.git#v1.0.2-alpha",
+    "aqua-verifier-js": "git+https://git@github.com/inblockio/aqua-verifier-js.git#v1.0.4-alpha",
     "dayjs": "^1.10.7",
     "framer-motion": "^5.5.6",
     "mime-types": "^2.1.34",
