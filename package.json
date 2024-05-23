@@ -1,6 +1,6 @@
 {
   "name": "AQUA-VerifyPage",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "AQUA Protocol Chrome verification extension",
   "main": "index.js",
   "scripts": {
