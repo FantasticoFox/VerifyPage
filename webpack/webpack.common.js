@@ -20,13 +20,7 @@ module.exports = {
     filename: "[name].js",
   },
   optimization: {
-    // minimize: false,
-    splitChunks: {
-      name: "vendor",
-      chunks(chunk) {
-        return chunk.name !== "background";
-      },
-    },
+    minimize: true,
   },
   module: {
     rules: [
