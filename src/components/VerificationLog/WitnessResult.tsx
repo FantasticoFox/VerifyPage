@@ -24,7 +24,7 @@ const WitnessResult = ({
     etherscan_error_message,
   } = witnessResult;
 
-  const etherscanNetworkURL = `https://${witness_network}.etherscan.io/`;
+  const etherscanNetworkURL = `https://${witness_network}.etherscan.io/tx/${tx_hash}`;
 
   const ConditionalIconListItem = ({
     condition,

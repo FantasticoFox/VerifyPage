@@ -10,7 +10,7 @@ Chrome Extension, TypeScript, HTML
 
 ## Prerequisites
 
-* [node + npm](https://nodejs.org/) (Current Version)
+* [node + npm](https://nodejs.org/) (v16.20.2)
 
 ## Includes the following
 
