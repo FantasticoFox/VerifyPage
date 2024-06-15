@@ -3,7 +3,7 @@
 
   "name": "VerifyPage",
   "description": "Chrome Extension, TypeScript",
-  "version": "1.2.6",
+  "version": "1.2.7",
 
   "action": {
     "default_icon": "icon.png",
