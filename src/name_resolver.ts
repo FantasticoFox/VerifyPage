@@ -82,9 +82,11 @@ export async function resolveNameByAddress(address: string) {
 
   const parsedTable = await getNameResolutionTable();
 
-  const keyExists = parsedTable[address];
-  if (keyExists) {
-    out = keyExists.nickName;
+  if (parsedTable) {
+    const keyExists = parsedTable[address];
+    if (keyExists) {
+      out = keyExists.nickName;
+    }
   }
 
   return out;
