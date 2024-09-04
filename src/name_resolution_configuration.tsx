@@ -51,7 +51,7 @@ async function prepareData() {
 async function prepareNameResolutionEnabled() {
   const d = await chrome.storage.sync.get(nameResolutionEnabledKey);
   if (!d[nameResolutionEnabledKey]) {
-    return false;
+    return true;
   }
   return JSON.parse(d[nameResolutionEnabledKey]);
 }
