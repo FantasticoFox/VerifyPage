@@ -258,6 +258,22 @@ const App = () => {
     setData(data.concat({ walletAddress: "", nickName: "" }));
   };
 
+
+  const onExport = () => {
+    // Create a Blob with the JSON content and the correct MIME type
+    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    // Create a link element
+    const link = document.createElement('a');
+    // Set the download attribute with the desired file name
+    link.download = 'name_resolution_export.json';
+    // Create a URL for the Blob and set it as the href attribute of the link
+    link.href = URL.createObjectURL(blob);
+    // Programmatically click the link to trigger the download
+    link.click();
+    // Clean up by revoking the object URL
+    URL.revokeObjectURL(link.href);
+  }
+
   // After data changes, we turn the flag back off
   // so that if data actually changes when we're not
   // editing it, the page is reset
@@ -342,6 +358,9 @@ const App = () => {
       </button>
       <button className="btn btn-secondary mr-2" onClick={onAddRowClick}>
         Add entry
+      </button>
+<button className="btn btn-primary mr-2" onClick={onExport}>
+        Export
       </button>
       <input
         type="file"
