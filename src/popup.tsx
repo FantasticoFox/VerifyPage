@@ -21,7 +21,7 @@ import {
   sanitizeWikiUrl,
   verificationStatusMap,
 } from "./verifier";
-import { formatPageInfo2HTML } from "aqua-verifier-js";
+import { formatter } from "aqua-verifier-js";
 import Layout from "./components/Layout";
 
 import * as nameResolver from "./name_resolver";
@@ -89,7 +89,7 @@ const Popup = () => {
     [key: string]: any;
   }) {
     const verbose = false;
-    let out = formatPageInfo2HTML(
+    let out = formatter.formatPageInfo2HTML(
       data.serverUrl,
       data.title,
       data.status,

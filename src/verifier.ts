@@ -1,5 +1,5 @@
 import {
-  verifyPage as externalVerifierVerifyPage,
+  verifyPageFromMwAPI,
   apiVersion as externalVerifierApiVersion,
 } from "aqua-verifier-js";
 const apiVersion = "0.3.0";
@@ -290,11 +290,11 @@ export function verifyPage(title: string, callback: Function | null = null) {
       }
 
       const doVerifyMerkleProof = true;
-      [verificationStatus, details] = await externalVerifierVerifyPage(
-        { title, server: serverUrl },
+      [verificationStatus, details] = await verifyPageFromMwAPI(
+        serverUrl,
+        title,
         verbose,
-        doVerifyMerkleProof,
-        null
+        !doVerifyMerkleProof,
       );
       setBadgeStatus(tab.id, verificationStatus);
       // Runtime check that the type is verificationDetailsOKT.

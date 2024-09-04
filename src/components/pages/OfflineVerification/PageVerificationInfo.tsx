@@ -160,7 +160,6 @@ const PageVerificationInfo = ({
         { offline_data: pageResult },
         verbose,
         doVerifyMerkleProof,
-        null
       );
       const title = pageResult.title;
       const serverUrl = "http://offline_verify_page";
