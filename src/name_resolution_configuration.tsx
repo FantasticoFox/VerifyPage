@@ -230,7 +230,7 @@ const App = () => {
   const [skipPageReset, setSkipPageReset] = React.useState(false);
   const [showSaveSuccess, setShowSaveSuccess] = React.useState(false);
   const [nameResolutionEnabled, setNameResolutionEnabled] =
-    React.useState(false);
+    React.useState(true);
 
   // We need to keep the table from resetting the pageIndex when we
   // Update data. So we can keep track of that flag with a ref.
