@@ -75,13 +75,14 @@ const WitnessResult = ({
   };
 
   const Extra = () =>
-    extra && (
+    // Must return null to render nothing if extra is falsy.
+    extra ? (
       <>
         <ListItem>{extra.domain_snapshot_genesis_hash}</ListItem>
         <ListItem>{extra.merkle_root}</ListItem>
         <ListItem>{extra.witness_event_verification_hash}</ListItem>
       </>
-    );
+    ) : null;
 
   const ScanNetwork = () => (
     <Link href={etherscanNetworkURL} isExternal textDecoration="underline">
