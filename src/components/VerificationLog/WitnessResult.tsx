@@ -12,7 +12,7 @@ const WitnessResult = ({
 }: {
   witnessResult: WitnessResultProps;
 }) => {
-  if (!witnessResult) return <Text>No Witness event detected</Text>;
+  if (Object.keys(witnessResult).length === 0) return <Text>No Witness event detected</Text>;
 
   const {
     tx_hash,
