@@ -1,4 +1,5 @@
-import { Text, List, ListItem, ListIcon, Link } from "@chakra-ui/react";
+import { Text, List, ListItem, ListIcon, Link, Flex } from "@chakra-ui/react";
+import { InfoIcon } from "@chakra-ui/icons";
 import { CheckCircleIcon, CloseIcon } from "@chakra-ui/icons";
 import type { WitnessResultProps } from "../../utils/formatPageInfo";
 import {
@@ -12,7 +13,13 @@ const WitnessResult = ({
 }: {
   witnessResult: WitnessResultProps;
 }) => {
-  if (Object.keys(witnessResult).length === 0) return <Text>No Witness event detected</Text>;
+  if (Object.keys(witnessResult).length === 0) 
+    return (
+        <Flex direction="column" alignItems="center">
+          <InfoIcon color="grey.300" boxSize={6} />
+          <Text>Not Witnessed</Text>
+        </Flex>
+    );
 
   const {
     tx_hash,
