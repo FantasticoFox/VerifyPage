@@ -58,7 +58,7 @@ const OfflineVerification = () => {
   }, []);
 
   React.useEffect(() => {
-    return () => uppy.close();
+    return () => uppy.destroy();
   }, []);
 
   const propsDashBoard = {

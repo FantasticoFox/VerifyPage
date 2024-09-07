@@ -169,8 +169,8 @@ export function setBadgeNORECORD(tabId: number) {
 
 export function getServerInfo(
   tabId: number
-): Promise<[string | null, string | null]> {
-  return new Promise((resolve, reject) => {
+): Promise<(string | null)[]> {
+  return new Promise((resolve, _) => {
     chrome.scripting.executeScript(
       {
         target: { tabId: tabId },
@@ -190,7 +190,7 @@ export function getServerInfo(
       },
       (injectionResults) => {
         const result = injectionResults[0].result;
-        resolve(result === "null" ? null : result);
+        resolve(result ?? [null, null]);
       }
     );
   });
