@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client';
 import { useTable, usePagination } from "react-table";
 import Alert from "react-bootstrap/Alert";
 import "./assets/scss/styles.scss";
@@ -370,4 +370,5 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById("root"));
+const root = createRoot(document.getElementById("root")!)
+root.render(<App />);

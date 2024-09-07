@@ -1,14 +1,10 @@
-import * as http from "http";
-import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
+import React, { useState } from "react";
 import {
   Center,
   VStack,
-  StackDivider,
   Box,
   CircularProgress,
   Heading,
-  Badge,
   Text,
 } from "@chakra-ui/react";
 import Clipboard from "clipboard";
