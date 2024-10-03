@@ -56,7 +56,7 @@ const OfflineVerification = () => {
     });
     return u;
   }, []);
-
+ 
   React.useEffect(() => {
     return () => uppy.destroy();
   }, []);

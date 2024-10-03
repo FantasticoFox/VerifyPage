@@ -93,7 +93,6 @@ const PageVerificationInfo = ({
       data.status,
       data.details
     );
-
     setVerificationLog(out);
   }
 
@@ -154,7 +153,7 @@ const PageVerificationInfo = ({
 
       const [verificationStatus, details] = await externalVerifierVerifyPage(
         { offline_data: pageResult },
-        verbose,
+        verbose, 
         doVerifyMerkleProof,
       );
       const title = pageResult.title;

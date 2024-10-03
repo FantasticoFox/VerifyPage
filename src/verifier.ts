@@ -227,7 +227,7 @@ export async function setInitialBadge(
 }
 
 export function verifyPage(title: string, callback: Function | null = null) {
-  chrome.tabs.query(
+  chrome.tabs.query( 
     { active: true, currentWindow: true },
     async function (tabs) {
       const tab = tabs[0];
@@ -307,6 +307,7 @@ export function verifyPage(title: string, callback: Function | null = null) {
           delete d.data.witness.structured_merkle_proof;
         });
       }
+      
       const verificationData = {
         sanitizedUrl,
         serverUrl: serverUrl,
