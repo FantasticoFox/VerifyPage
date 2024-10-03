@@ -1,11 +1,6 @@
 import { Text, List, ListItem, ListIcon, Link, Flex } from "@chakra-ui/react";
-import { InfoIcon } from "@chakra-ui/icons";
-import { CheckCircleIcon, CloseIcon } from "@chakra-ui/icons";
+import { AtSignIcon, CheckCircleIcon, CloseIcon, InfoIcon, LinkIcon } from "@chakra-ui/icons";
 import type { WitnessResultProps } from "../../utils/formatPageInfo";
-import {
-  Radar as RadarIcon,
-  CompareArrows as CompareArrowsIcon,
-} from "@mui/icons-material";
 import React from "react";
 
 const WitnessResult = ({
@@ -13,13 +8,15 @@ const WitnessResult = ({
 }: {
   witnessResult: WitnessResultProps;
 }) => {
-  if (Object.keys(witnessResult).length === 0) 
+
+  if (witnessResult && Object.keys(witnessResult).length === 0) {
     return (
-        <Flex direction="column" alignItems="center">
-          <InfoIcon color="grey.300" boxSize={6} />
-          <Text>Not Witnessed</Text>
-        </Flex>
+      <Flex direction="column" alignItems="start">
+        <InfoIcon color="grey.300" boxSize={6} />
+        <Text>Not Witnessed</Text>
+      </Flex>
     );
+  }
 
   const {
     tx_hash,
@@ -107,7 +104,7 @@ const WitnessResult = ({
     <List fontSize="sm" maxW="sm" spacing={3}>
       {tx_hash && (
         <IconListItem
-          icon={CompareArrowsIcon}
+          icon={AtSignIcon}
           title="Transaction Hash"
           content={tx_hash}
           truncateContent
@@ -132,7 +129,7 @@ const WitnessResult = ({
         content={merkle_proof_status}
       />
       <IconListItem
-        icon={RadarIcon}
+        icon={LinkIcon}
         title="Scanner"
         content={<ScanNetwork />}
       />
