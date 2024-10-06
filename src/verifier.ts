@@ -99,6 +99,10 @@ export function extractPageTitle(urlObj: URL | null) {
   if (!urlObj.pathname.startsWith("/index.php")) {
     return "";
   }
+  //This ensures that special pages are not verified as they have no records
+  if (urlObj.pathname.includes("Special:")) {
+    return "";
+  }
   let titleUrlForm;
   if (urlObj.searchParams.has("title")) {
     // If there is title param, return it instead.
