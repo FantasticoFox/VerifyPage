@@ -87,6 +87,7 @@ const PageVerificationInfo = ({
   async function formatDetailsAndSetVerificationLog(data: {
     [key: string]: any;
   }) {
+    console.log("Offline Data: ", data)
     let out = await formatPageInfo(
       data.serverUrl,
       data.title,
