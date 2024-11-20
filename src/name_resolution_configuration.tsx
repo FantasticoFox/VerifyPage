@@ -6,6 +6,7 @@ import "./assets/scss/styles.scss";
 import { Button, ChakraProvider, Container, Input, InputGroup, InputLeftElement, TableContainer, VStack, Table as ChakraTable, Thead, Tr, Th, Tbody, Td, Box, Icon, IconButton, ButtonGroup, HStack, NumberInput, NumberInputField, Select, FormLabel, Switch, useToast, Heading, AlertIcon, Alert } from "@chakra-ui/react";
 import { AddIcon, ArrowForwardIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon, ChevronLeftIcon, ChevronRightIcon, DownloadIcon, PhoneIcon } from "@chakra-ui/icons";
 import { FileDownload, SaveAltOutlined } from "@mui/icons-material";
+import { ethers } from "ethers";
 
 const range = (len) => {
   // Creates [0, 1, 2, ... <len>]
@@ -15,7 +16,7 @@ const range = (len) => {
 const newPerson = () => {
   const statusChance = Math.random();
   return {
-    walletAddress: "0xab5801a7d398351b8be11c439e05c5b3259aec9b",
+    walletAddress: ethers.getAddress("0xab5801a7d398351b8be11c439e05c5b3259aec9b"),
     nickName: "vbuterin",
   };
 };
@@ -40,7 +41,7 @@ const nameResolutionEnabledKey =
 async function prepareData() {
   const d = await chrome.storage.sync.get(storageKey);
   if (!d[storageKey]) {
-    return makeData(10);
+    return makeData(1);
   }
   const parsed = JSON.parse(d[storageKey]);
   // Convert to array
@@ -329,7 +330,8 @@ const App = () => {
       const clone = Object.assign({}, e)
       // We delete the wallet address from the entry to save space.
       delete clone.walletAddress;
-      hashmapData[walletAddress] = clone;
+      const cleanedWalletAddress = ethers.getAddress(walletAddress)
+      hashmapData[cleanedWalletAddress] = clone;
     }
     chrome.storage.sync.set({ [storageKey]: JSON.stringify(hashmapData) });
     toast({
@@ -352,7 +354,10 @@ const App = () => {
       parsed.forEach(item => {
         const exists = data.some(baseItem => baseItem.walletAddress.toLowerCase() === item.walletAddress.toLowerCase());
         if (!exists) {
-          newData.push(item);
+          newData.push({
+            nickName: item.name,
+            walletAddress: ethers.getAddress(item.walletAddress)
+          });
         }
       });
       setData(newData);
@@ -378,6 +383,7 @@ const App = () => {
       [nameResolutionEnabledKey]: JSON.stringify(enabled),
     });
   };
+
   return (
     <>
       <Container maxW={'container.xl'} py={'40px'}>
