@@ -193,6 +193,7 @@ export function getServerInfo(
         },
       },
       (injectionResults) => {
+        if (!injectionResults) resolve([null, null]);
         const result = injectionResults[0].result;
         resolve(result ?? [null, null]);
       }
