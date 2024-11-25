@@ -1,14 +1,10 @@
-import * as http from "http";
-import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
+import React, { useState } from "react";
 import {
   Center,
   VStack,
-  StackDivider,
   Box,
   CircularProgress,
   Heading,
-  Badge,
   Text,
 } from "@chakra-ui/react";
 import Clipboard from "clipboard";
@@ -91,13 +87,13 @@ const PageVerificationInfo = ({
   async function formatDetailsAndSetVerificationLog(data: {
     [key: string]: any;
   }) {
+    console.log("Offline Data: ", data)
     let out = await formatPageInfo(
       data.serverUrl,
       data.title,
       data.status,
       data.details
     );
-
     setVerificationLog(out);
   }
 
@@ -158,9 +154,8 @@ const PageVerificationInfo = ({
 
       const [verificationStatus, details] = await externalVerifierVerifyPage(
         { offline_data: pageResult },
-        verbose,
+        verbose, 
         doVerifyMerkleProof,
-        null
       );
       const title = pageResult.title;
       const serverUrl = "http://offline_verify_page";

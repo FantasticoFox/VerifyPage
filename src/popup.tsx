@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client';
 import {
   Box,
   Heading,
@@ -21,7 +21,7 @@ import {
   sanitizeWikiUrl,
   verificationStatusMap,
 } from "./verifier";
-import { formatPageInfo2HTML } from "aqua-verifier-js";
+import { formatter } from "aqua-verifier-js";
 import Layout from "./components/Layout";
 
 import * as nameResolver from "./name_resolver";
@@ -89,7 +89,7 @@ const Popup = () => {
     [key: string]: any;
   }) {
     const verbose = false;
-    let out = formatPageInfo2HTML(
+    let out = formatter.formatPageInfo2HTML(
       data.serverUrl,
       data.title,
       data.status,
@@ -133,7 +133,6 @@ const Popup = () => {
       <Button onClick={handleVerifyPageClick}>Verify Page</Button>
     </ButtonGroup>
   );
-
   return (
     <Layout toolbar={popupToolbar}>
       <Stack direction="column" minW="700px">
@@ -176,9 +175,9 @@ const Popup = () => {
   );
 };
 
-ReactDOM.render(
+const root = createRoot(document.getElementById("root")!)
+root.render(
   <React.StrictMode>
     <Popup />
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );

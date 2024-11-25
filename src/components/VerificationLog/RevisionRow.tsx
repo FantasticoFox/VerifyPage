@@ -2,6 +2,7 @@ import { Link, Text, Flex, Box, Tr, Td } from "@chakra-ui/react";
 import {
   CheckCircleIcon,
   WarningTwoIcon,
+  InfoIcon,
   LockIcon,
   CloseIcon,
 } from "@chakra-ui/icons";
@@ -47,7 +48,7 @@ const Signature = ({
     case "MISSING":
       return (
         <Flex direction="column" alignItems="center">
-          <WarningTwoIcon color="warning" boxSize={6} />
+          <InfoIcon color="grey.300" boxSize={6} />
           <Text>Unsigned</Text>
         </Flex>
       );

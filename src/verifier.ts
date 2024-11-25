@@ -1,5 +1,5 @@
 import {
-  verifyPage as externalVerifierVerifyPage,
+  verifyPageFromMwAPI,
   apiVersion as externalVerifierApiVersion,
 } from "aqua-verifier-js";
 const apiVersion = "0.3.0";
@@ -99,6 +99,10 @@ export function extractPageTitle(urlObj: URL | null) {
   if (!urlObj.pathname.startsWith("/index.php")) {
     return "";
   }
+  //This ensures that special pages are not verified as they have no records
+  if (urlObj.pathname.includes("Special:")) {
+    return "";
+  }
   let titleUrlForm;
   if (urlObj.searchParams.has("title")) {
     // If there is title param, return it instead.
@@ -169,8 +173,8 @@ export function setBadgeNORECORD(tabId: number) {
 
 export function getServerInfo(
   tabId: number
-): Promise<[string | null, string | null]> {
-  return new Promise((resolve, reject) => {
+): Promise<(string | null)[]> {
+  return new Promise((resolve, _) => {
     chrome.scripting.executeScript(
       {
         target: { tabId: tabId },
@@ -191,7 +195,7 @@ export function getServerInfo(
       (injectionResults) => {
         if (!injectionResults) resolve([null, null]);
         const result = injectionResults[0].result;
-        resolve(result === "null" ? null : result);
+        resolve(result ?? [null, null]);
       }
     );
   });
@@ -228,7 +232,7 @@ export async function setInitialBadge(
 }
 
 export function verifyPage(title: string, callback: Function | null = null) {
-  chrome.tabs.query(
+  chrome.tabs.query( 
     { active: true, currentWindow: true },
     async function (tabs) {
       const tab = tabs[0];
@@ -291,11 +295,11 @@ export function verifyPage(title: string, callback: Function | null = null) {
       }
 
       const doVerifyMerkleProof = true;
-      [verificationStatus, details] = await externalVerifierVerifyPage(
-        { title, server: serverUrl },
+      [verificationStatus, details] = await verifyPageFromMwAPI(
+        serverUrl,
+        title,
         verbose,
-        doVerifyMerkleProof,
-        null
+        !doVerifyMerkleProof,
       );
       setBadgeStatus(tab.id, verificationStatus);
       // Runtime check that the type is verificationDetailsOKT.
@@ -308,6 +312,7 @@ export function verifyPage(title: string, callback: Function | null = null) {
           delete d.data.witness.structured_merkle_proof;
         });
       }
+      
       const verificationData = {
         sanitizedUrl,
         serverUrl: serverUrl,

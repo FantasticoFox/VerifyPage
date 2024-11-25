@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client';
 import Clipboard from "clipboard";
 import wtf from "wtf_wikipedia";
 import wtfPluginHtml from "wtf-plugin-html";
@@ -56,9 +56,9 @@ const OfflineVerification = () => {
     });
     return u;
   }, []);
-
+ 
   React.useEffect(() => {
-    return () => uppy.close();
+    return () => uppy.destroy();
   }, []);
 
   const propsDashBoard = {
@@ -87,9 +87,9 @@ const OfflineVerification = () => {
   );
 };
 
-ReactDOM.render(
+const root = createRoot(document.getElementById("root")!)
+root.render(
   <React.StrictMode>
     <OfflineVerification />
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );
