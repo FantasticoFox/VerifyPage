@@ -54,7 +54,7 @@ async function prepareData() {
 async function prepareNameResolutionEnabled() {
   const d = await chrome.storage.sync.get(nameResolutionEnabledKey);
   if (!d[nameResolutionEnabledKey]) {
-    return false;
+    return true;
   }
   return JSON.parse(d[nameResolutionEnabledKey]);
 }
@@ -266,8 +266,7 @@ const App = () => {
 
   const [data, setData] = React.useState([]);
   const [skipPageReset, setSkipPageReset] = React.useState(false);
-  const [nameResolutionEnabled, setNameResolutionEnabled] =
-    React.useState(false);
+  const [nameResolutionEnabled, setNameResolutionEnabled] = React.useState(false);
   const toast = useToast()
   // We need to keep the table from resetting the pageIndex when we
   // Update data. So we can keep track of that flag with a ref.
@@ -294,6 +293,22 @@ const App = () => {
   const onAddRowClick = () => {
     setData(data.concat({ walletAddress: "", nickName: "" }));
   };
+
+
+  const onExport = () => {
+    // Create a Blob with the JSON content and the correct MIME type
+    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    // Create a link element
+    const link = document.createElement('a');
+    // Set the download attribute with the desired file name
+    link.download = 'name_resolution_export.json';
+    // Create a URL for the Blob and set it as the href attribute of the link
+    link.href = URL.createObjectURL(blob);
+    // Programmatically click the link to trigger the download
+    link.click();
+    // Clean up by revoking the object URL
+    URL.revokeObjectURL(link.href);
+  }
 
   // After data changes, we turn the flag back off
   // so that if data actually changes when we're not
