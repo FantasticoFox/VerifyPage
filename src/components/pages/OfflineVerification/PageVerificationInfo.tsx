@@ -72,7 +72,24 @@ const supportedDocumentExtensions = [
   "xls",
   "xlsx",
   "ppt",
-  "pptx"
+  "pptx",
+  "json",
+  "txt",
+  "html",
+  "css",
+  "csv",
+  "html",
+  "hocon",
+  "cpp",
+  "c",
+  "py",
+  "kt",
+  "java",
+  "php",
+  "sass",
+  "ts",
+  "tsx",
+  "md"
 ];
 
 export type PageResult = {
@@ -207,10 +224,94 @@ const PageVerificationInfo = ({
           </audio></div>`;
       } else if (supportedDocumentExtensions.includes(fileExtension)) {
         // Render documents like PDF
-        if (fileExtension === "pdf") {
-          fileContent +=
-            `<div><embed src="data:${mimeType};base64,${lastRevision.content.file.data}" 
-              type="${mimeType}" width="100%" height="500px" /></div>`;
+        // if (fileExtension === "pdf") {
+         
+
+
+        // return `extension ${fileExtension}`
+        if (fileExtension.replace(/\s+/g, '') == "pdf") {
+
+
+          const base64toBlob = (base64: string) => {
+            const byteCharacters = atob(base64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+              byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            return new Blob([byteArray], {type: 'application/pdf'});
+          };
+          
+          const blob = base64toBlob(lastRevision.content.file.data);
+          const blobUrl = URL.createObjectURL(blob);
+          
+          fileContent += `
+            <object 
+              data="${blobUrl}" 
+              type="application/pdf" 
+              width="100%" 
+              height="500px"
+            >
+              <p>Your browser doesn't support PDF viewing. 
+                <a href="${blobUrl}" download="document.pdf">Download PDF</a>
+              </p>
+            </object>
+          `;
+
+        } else if (["json",
+          "txt",
+          "html",
+          "css",
+          "csv",
+          "html",
+          "hocon",
+          "cpp",
+          "c",
+          "py",
+          "kt",
+          "java",
+          "php",
+          "sass",
+          "ts",
+          "tsx",
+          "md"].includes(fileExtension.replace(/\s+/g, ''))) {
+          // Decode base64 to string
+          const decodedContent = atob(lastRevision.content.file.data);
+
+          console.log("decodedContent ==>", decodedContent)
+
+          // Determine syntax highlighting and formatting based on file type
+          let formattedContent = decodedContent;
+          if (fileExtension.replace(/\s+/g, '') === "json") {
+            try {
+              // Pretty print JSON with indentation
+              formattedContent = JSON.stringify(JSON.parse(decodedContent), null, 2);
+            } catch (error) {
+              console.error("Error parsing json for preview ", error)
+              // If JSON parsing fails, show original content
+              formattedContent = decodedContent;
+            }
+          }
+
+          console.log("formattedContent ==> ", formattedContent)
+
+          fileContent += `
+              <div 
+                  style={{
+                      backgroundColor: '#f4f4f4',
+                      color:"black",
+                      borderRadius: '12px',
+                      padding: '15px',
+                      maxHeight: '600px',
+                      overflowY: 'auto',
+                      fontFamily: 'monospace',
+                      whiteSpace: 'pre-wrap',
+                      wordBreak: 'break-word'
+                  }}
+              >
+                  ${formattedContent}
+              </div>
+          `
         } else {
           fileContent += `<div>Document type "${fileExtension}" not supported for inline preview.</div>`;
         }
