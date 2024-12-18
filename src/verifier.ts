@@ -38,42 +38,42 @@ type verificationDetailsT =
 // This is used in the popup.html and offline_verification.html, for a more
 // informative description of each verification status.
 export const verificationStatusMap: { [key: string]: VerificationStatusProps } =
-  {
-    // See the color in verifier.ts
-    // Apple
-    VERIFIED: {
-      title: "Page integrity verified",
-      subtitle: "Information on this page has not been tampered with.",
-      keyColor: BadgeColorSuccess,
-    },
-    // Fire Engine Red
-    INVALID: {
-      title: "Page integrity verification failed",
-      subtitle: "Information on this page can't be trusted.",
-      keyColor: BadgeColorError,
-    },
-    NORECORD: {
-      title: "Data accounting supported but no record available",
-      subtitle: "Information on this page might have been tampered.",
-      keyColor: BadgeColorBlue,
-    },
-    API_MISMATCH: {
-      title: "Mismatch",
-      subtitle: "Incompatible version.",
-      keyColor: BadgeColorYellow,
-    },
-    "N/A": {
-      title: "No record available",
-      subtitle: "Information on this page might have been tampered.",
-      keyColor: BadgeColorNA,
-    },
-    // Fire Engine Red
-    ERROR: {
-      title: "Error",
-      subtitle: "An error has occured.",
-      keyColor: BadgeColorError,
-    },
-  };
+{
+  // See the color in verifier.ts
+  // Apple
+  VERIFIED: {
+    title: "Page integrity verified",
+    subtitle: "Information on this page has not been tampered with.",
+    keyColor: BadgeColorSuccess,
+  },
+  // Fire Engine Red
+  INVALID: {
+    title: "Page integrity verification failed",
+    subtitle: "Information on this page can't be trusted.",
+    keyColor: BadgeColorError,
+  },
+  NORECORD: {
+    title: "Data accounting supported but no record available",
+    subtitle: "Information on this page might have been tampered.",
+    keyColor: BadgeColorBlue,
+  },
+  API_MISMATCH: {
+    title: "Mismatch",
+    subtitle: "Incompatible version.",
+    keyColor: BadgeColorYellow,
+  },
+  "N/A": {
+    title: "No record available",
+    subtitle: "Information on this page might have been tampered.",
+    keyColor: BadgeColorNA,
+  },
+  // Fire Engine Red
+  ERROR: {
+    title: "Error",
+    subtitle: "An error has occured.",
+    keyColor: BadgeColorError,
+  },
+};
 
 function isEmpty(obj: any) {
   return Object.keys(obj).length === 0;
@@ -86,6 +86,7 @@ export function getUrlObj(tab: any) {
 export function sanitizeWikiUrl(url: string) {
   // E.g. original: http://localhost:9352/index.php?title=Main_Page&action=history.
   // Sanitized: http://localhost:9352/.
+  // return "http://localhost:5173"
   return url.split("index.php")[0];
 }
 
@@ -232,7 +233,7 @@ export async function setInitialBadge(
 }
 
 export function verifyPage(title: string, callback: Function | null = null) {
-  chrome.tabs.query( 
+  chrome.tabs.query(
     { active: true, currentWindow: true },
     async function (tabs) {
       const tab = tabs[0];
@@ -312,7 +313,7 @@ export function verifyPage(title: string, callback: Function | null = null) {
           delete d.data.witness.structured_merkle_proof;
         });
       }
-      
+
       const verificationData = {
         sanitizedUrl,
         serverUrl: serverUrl,
