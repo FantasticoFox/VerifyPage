@@ -8,7 +8,7 @@ declare global {
 
 const html = document.querySelector("html");
 
-const aquaDomReplacer = async (html: any) => {
+const aquaDomReplacer = async (htmlEl: any) => {
   const daMeta = document.querySelector(
     `meta[name="data-accounting-mediawiki"]`
   );
@@ -23,7 +23,7 @@ const aquaDomReplacer = async (html: any) => {
     if (!parsedTable) {
       return;
     }
-    nameResolver.replaceAllAddresses(html, parsedTable);
+    nameResolver.replaceAllAddresses(htmlEl, parsedTable);
   }
 }
 
@@ -37,7 +37,7 @@ window.addEventListener('REPLACE_ADDRESSES', async (event: CustomEvent<{ element
   const targetElement = event.detail?.element || document.documentElement;
 
   try {
-    console.log("REached: ", targetElement)
+    console.log("Reached: ", targetElement)
     await aquaDomReplacer(targetElement);
     console.log("Triggered")
   } catch (error) {
