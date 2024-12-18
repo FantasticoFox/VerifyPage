@@ -133,6 +133,7 @@ const Popup = () => {
       <Button onClick={handleVerifyPageClick}>Verify Page</Button>
     </ButtonGroup>
   );
+  
   return (
     <Layout toolbar={popupToolbar}>
       <Stack direction="column" minW="700px">
