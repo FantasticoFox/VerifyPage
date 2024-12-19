@@ -28,7 +28,6 @@
     "service_worker": "background.js"
   },
 
-  "permissions": ["storage", "unlimitedStorage", "cookies", "scripting"],
-
+  "permissions": ["storage", "unlimitedStorage", "cookies", "scripting", "activeTab"],
   "host_permissions": ["<all_urls>"]
 }
