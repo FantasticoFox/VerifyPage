@@ -54,8 +54,10 @@ async function prepareData() {
 async function prepareNameResolutionEnabled() {
   const d = await chrome.storage.sync.get(nameResolutionEnabledKey);
   if (!d[nameResolutionEnabledKey]) {
+    console.log("true = prepareNameResolutionEnabled "+ prepareNameResolutionEnabled);
     return true;
   }
+  console.log("false = prepareNameResolutionEnabled ");
   return JSON.parse(d[nameResolutionEnabledKey]);
 }
 
@@ -266,7 +268,7 @@ const App = () => {
 
   const [data, setData] = React.useState([]);
   const [skipPageReset, setSkipPageReset] = React.useState(false);
-  const [nameResolutionEnabled, setNameResolutionEnabled] = React.useState(false);
+  const [nameResolutionEnabled, setNameResolutionEnabled] = React.useState<boolean | null>(null);
   const toast = useToast()
   // We need to keep the table from resetting the pageIndex when we
   // Update data. So we can keep track of that flag with a ref.
@@ -317,11 +319,41 @@ const App = () => {
     setSkipPageReset(false);
   }, [data]);
 
+  //changed
+  // React.useEffect(() => {
+  //   prepareData().then(setData);
+  //   // Restore nameResolutionEnabled state from storage.
+  //   prepareNameResolutionEnabled().then(setNameResolutionEnabled);
+  // }, []);
+
   React.useEffect(() => {
-    prepareData().then(setData);
-    // Restore nameResolutionEnabled state from storage.
-    prepareNameResolutionEnabled().then(setNameResolutionEnabled);
+    // Load the enabled state first
+    const loadInitialState = async () => {
+      try {
+        const enabled = await prepareNameResolutionEnabled();
+        setNameResolutionEnabled(enabled);
+
+        console.log("name resolution enabled ", enabled)
+        // Only load data after we know the enabled state
+        const initialData = await prepareData();
+        setData(initialData);
+
+        console.log("initial data ", initialData)
+      } catch (error) {
+        console.error('Error loading initial state:', error);
+        toast({
+          title: 'Error loading initial state:',
+          description: "Data "+JSON.stringify(error),
+          status: 'error',
+          duration: 4000,
+          isClosable: true,
+        })        
+      }
+    };
+
+    loadInitialState();
   }, []);
+
 
   const saveData = (arg: React.SyntheticEvent | object[]) => {
     // Convert the array data to a hash map structure.
@@ -348,7 +380,9 @@ const App = () => {
       const cleanedWalletAddress = ethers.getAddress(walletAddress)
       hashmapData[cleanedWalletAddress] = clone;
     }
+
     chrome.storage.sync.set({ [storageKey]: JSON.stringify(hashmapData) });
+    saveNameResolutionEnabled(!!nameResolutionEnabled)
     toast({
       title: 'Data saved.',
       description: "Data for name resolution saved successfully.",
@@ -356,6 +390,9 @@ const App = () => {
       duration: 4000,
       isClosable: true,
     })
+
+    
+
   };
 
   const importFile = (file: File) => {
@@ -392,15 +429,36 @@ const App = () => {
     URL.revokeObjectURL(url);
   };
 
-  const saveNameResolutionEnabled = (enabled) => {
-    setNameResolutionEnabled(enabled);
-    chrome.storage.sync.set({
-      [nameResolutionEnabledKey]: JSON.stringify(enabled),
-    });
+  // const saveNameResolutionEnabled = (enabled) => {
+  //   setNameResolutionEnabled(enabled);
+  //   chrome.storage.sync.set({
+  //     [nameResolutionEnabledKey]: JSON.stringify(enabled),
+  //   });
+  // };
+  const saveNameResolutionEnabled = async (enabled) => {
+    try {
+      await chrome.storage.sync.set({
+        [nameResolutionEnabledKey]: JSON.stringify(enabled)
+      });
+      setNameResolutionEnabled(enabled);
+    } catch (error) {
+      console.error('Error saving name resolution state:', error);
+      // Optionally show an error toast here
+
+      toast({
+        title: 'Error Saving Data.',
+        description: 'Error saving name resolution state:' + JSON.stringify(error),
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+      })
+    }
   };
 
-  return (
-    <>
+
+  const renderNameResolutionView = () => {
+
+    return (
       <Container maxW={'container.xl'} py={'40px'}>
         <VStack align={'start'} justify={'start'}>
           <Heading as={'h1'} fontWeight={500} size={'2xl'}>Name Resolution</Heading>
@@ -432,6 +490,20 @@ const App = () => {
           />
         </VStack>
       </Container>
+    )
+  }
+
+  const renderView = () => {
+    // Don't render until we have loaded the initial state
+    if (nameResolutionEnabled === null) {
+      return <div>Loading...</div>;
+    } else {
+      return renderNameResolutionView()
+    }
+  }
+  return (
+    <>
+      {renderView()}
     </>
   );
 };
