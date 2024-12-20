@@ -250,7 +250,7 @@ const PageVerificationInfo = ({
               data="${blobUrl}" 
               type="application/pdf" 
               width="100%" 
-              height="500px"
+              height="1500px"
             >
               <p>Your browser doesn't support PDF viewing. 
                 <a href="${blobUrl}" download="document.pdf">Download PDF</a>

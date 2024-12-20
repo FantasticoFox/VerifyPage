@@ -390,9 +390,6 @@ const App = () => {
       duration: 4000,
       isClosable: true,
     })
-
-    
-
   };
 
   const importFile = (file: File) => {
